@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: python-app-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: python-app
+  endpoints:
+  - port: http          # Be cautious Santhosh Remember to keep same name for port in service.yaml-IMPORTANT
+    path: /metrics      
+    interval: 15s
+    scheme: http
+    relabelings:
+    - action: replace
+      sourceLabels: [__meta_kubernetes_service_name]
+      targetLabel: job
+    - action: replace
+      sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
