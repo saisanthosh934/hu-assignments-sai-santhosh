@@ -12,14 +12,11 @@ def elevate_to_root():
     if os.geteuid() != 0:
         print("You are not root. Elevating now...")
         try:
-            print(
-                f'sys executable {sys.executable} , sys aruments are {sys.argv}')  # testing to resolve error
+            print(f'sys executable {sys.executable} , sys aruments are {sys.argv}')  # testing to resolve error
             time.sleep(10)  # testing to resolve error
-            print(
-                f'System executable is {sys.executable} and SYS ARGV is {sys.argv}')
+            print(f'System executable is {sys.executable} and SYS ARGV is {sys.argv}')
             subprocess.run(['sudo', sys.executable] + sys.argv, check=True)
-            print(
-                f'System executable is {sys.executable} and SYS ARGV is {sys.argv}')
+            print(f'System executable is {sys.executable} and SYS ARGV is {sys.argv}')
             sys.exit(0)
         except subprocess.CalledProcessError as e:
             print("Process failed while elevating to root", file=sys.stderr)
@@ -31,10 +28,8 @@ def validate_username(username):
     if not username.isalnum() or len(username) > 10:
         print("Username is not valid. Make sure it alphanumeric and less than 10 charecters", file=sys.stderr)
         return False
-
     try:
-        subprocess.run(['id', username], check=True,
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(['id', username], check=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f"User {username} already exists.", file=sys.stderr)
         return False
     except subprocess.CalledProcessError:
@@ -74,14 +69,7 @@ def generate_ssh_key(username):
     print(f'Public key path: {public_key_path}')  # testing to resolve error
 
     try:
-        subprocess.run([
-            'ssh-keygen',
-            '-t', 'rsa',
-            '-b', '4096',
-            '-f', private_key_path,
-            '-N', '',
-            '-q'
-        ], check=True)
+        subprocess.run(['ssh-keygen','-t', 'rsa','-b', '4096','-f', private_key_path,'-N', '','-q'], check=True)
 
         os.chmod(private_key_path, 0o600)
         return public_key_path, private_key_path, key_dir
@@ -96,8 +84,7 @@ def generate_ssh_key(username):
 
 def create_user(username, public_key_path, private_key_path):
     try:
-        subprocess.run(['adduser', '--disabled-password',
-                       '--gecos', '', username], check=True)
+        subprocess.run(['adduser', '--disabled-password','--gecos', '', username], check=True)
         subprocess.run(['usermod', '-aG', 'sudo', username], check=True)
 
         ssh_dir = f"/home/{username}/.ssh"
@@ -124,10 +111,8 @@ def create_user(username, public_key_path, private_key_path):
 
         print(f"\n{username} user created successfully with sudo privileges.")
     except Exception as e:
-        print(
-            f"Failed to create user: {str(e)}", file=sys.stderr)
-        subprocess.run(['userdel', '--remove', username],
-                       stderr=subprocess.DEVNULL)  # If sor some reason process failes we wanna delete user
+        print(f"Failed to create user: {str(e)}", file=sys.stderr)
+        subprocess.run(['userdel', '--remove', username],stderr=subprocess.DEVNULL)  # If sor some reason process failes we wanna delete user
         sys.exit(1)
 
 
@@ -152,8 +137,7 @@ def main():
 
     if use_existing == 'y':
         while True:  # Prompt for existing public key path until valid key is given as user is having it
-            public_key_path = input(
-                "Enter path to existing public key: ").strip()
+            public_key_path = input("Enter path to existing public key: ").strip()
             if validate_public_key(public_key_path):
                 break
         private_key_path = None
