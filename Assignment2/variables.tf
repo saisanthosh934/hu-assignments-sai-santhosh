@@ -56,3 +56,9 @@ variable "bucket_name" {
   type        = string
   default     = "jigalala1234"
 }
+
+variable "internet_traffic_ip" {
+  description = "Internet traffic CIDR block"
+  type = string
+  default = "0.0.0.0/0"
+}

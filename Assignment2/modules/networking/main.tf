@@ -37,7 +37,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.internet_traffic_ip
     gateway_id = aws_internet_gateway.gw.id
   }
 
@@ -68,7 +68,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
+    cidr_block     = var.internet_traffic_ip
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 
@@ -99,7 +99,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.internet_traffic_ip]
   }
 
   tags = {

@@ -22,3 +22,8 @@ variable "allowed_ssh_ip" {
   description = "IP address allowed to SSH into instances"
   type        = string
 }
+
+variable "internet_traffic_ip" {
+  description = "IP address for internet traffic"
+  type        = string
+}

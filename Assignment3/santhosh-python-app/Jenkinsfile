@@ -38,7 +38,6 @@ pipeline {
             steps {
                 script {
                     sh 'docker system prune -f'
-                    sh 'docker container prune -f'
                     sh 'docker build -t ${APP_NAME}:${BUILD_NUMBER} .'
                 }
             }
